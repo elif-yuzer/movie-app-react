@@ -1,22 +1,18 @@
-import React from "react";
-import { MovieContext } from "../context/MovieProvider";
-import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react'
+import { MovieContext } from '../context/MovieProvider'
+import { useContext } from 'react'
 
-const MovieCard = () => {
-  const { film, imgUrl } = useContext(MovieContext);
-  const navigate = useNavigate();
+const Watchlist = () => {
 
- 
-
-
-  console.log(film);
+    const {myMovies}=useContext(MovieContext)
+   /*  console.log(myMovies); */
+   
+    
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-      {film?.length > 0 ? (
-        film.map((a) => (
+      {myMovies?.length > 0 ? (
+        myMovies.map((a) => (
           <div
-            onClick={() => navigate(`/details/${a.id}`, { state: a })}
             key={a.id}
             className=" cursor-pointer group overflow-hidden"
           >
@@ -24,7 +20,7 @@ const MovieCard = () => {
               <figure>
                 <img
                   className=" object-cover"
-                  src={`${imgUrl}${a.poster_path}`}
+                  src={a.poster_url}
                   alt={a.title}
                 />
               </figure>
@@ -67,6 +63,7 @@ const MovieCard = () => {
         <h2 className="text-white">Filmler aranıyor veya bulunamadı... 🎥</h2>
       )}
     </div>
-  );
-};
-export default MovieCard;
+  )
+}
+
+export default Watchlist

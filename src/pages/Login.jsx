@@ -6,7 +6,7 @@ import bgImage from '../assets/denise-jans-Lq6rcifGjOU-unsplash.jpg'
 
 const Login = () => {
 
-  const { handleLogin, loading, setLoading, currentUser, handleResetPass,togglemesaj } =
+  const { handleLogin, currentUser, handleResetPass,togglemesaj } =
     useContext(AuthContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -19,20 +19,12 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen w-full bg-zinc-300"  >
-    <div className="w-full md:w-1/2 flex items-center justify-center p-4" >
-    
-    <div className="relative w-full max-w-md rounded-2xl backdrop-blur-xl shadow-2xl p-10 border border-slate-700 bg-slate-900/90 text-slate-100">
+    <div className="flex min-h-screen w-full bg-green-500"  >
+    <div className="w-full md:w-1/2 flex items-center justify-center p-4 bg-amber-500" >
   
-
-  {togglemesaj && (
-    <div className="fixed top- right-5 z-100 animate-bounce">
-      <div className="alert alert-success shadow-lg">
-        <span>Giriş bağlantısı gönderildi!</span>
-      </div>
-    </div>
-  )}
-
+    <div className="relative bg-blue-700 w-full max-w-md rounded-2xl backdrop-blur-xl shadow-2xl p-10 border border-slate-700 text-slate-100">
+    
+  
   <h2 className="text-4xl font-bold text-white mb-2">Hoş Geldiniz</h2>
   <p className="text-slate-400 mb-8 text-sm">Lütfen hesap bilgilerinizle giriş yapın.</p>
 
@@ -50,11 +42,19 @@ const Login = () => {
       type="password"
       onChange={(e) => setPassword(e.target.value)}
     />
-
+ 
     <div className="flex items-center justify-between text-xs font-medium">
       <button type="button" onClick={() => handleResetPass(email)} className="text-slate-400 hover:text-red-400 transition-colors">
         Şifremi Unuttum
       </button>
+      {  togglemesaj && (
+    <div className="fixed top-5 right-5 z-100 animate-bounce">
+      <div className="alert alert-success shadow-lg ">
+        <span>Reset isteği gönderildi!</span>
+      </div>
+    </div>
+  )}
+
       <button type="button" onClick={() => navigate("/register")} className="text-red-500 hover:text-red-400">
         Yeni Hesap Oluştur
       </button>
@@ -79,6 +79,7 @@ const Login = () => {
 </div>
 
 </div>
+
  <div
         className="hidden md:block md:w-1/2 h-screen bg-cover bg-center bg-no-repeat relative"
         style={{ backgroundImage: `url(${bgImage})` }}

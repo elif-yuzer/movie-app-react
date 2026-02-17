@@ -74,7 +74,7 @@ const AuthProvider = ({ children }) => {
 
         setTogglemesaj(false)
 
-      },3000)
+      },100)
 
       
     } catch(error){

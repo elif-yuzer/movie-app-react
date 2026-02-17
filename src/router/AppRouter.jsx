@@ -1,15 +1,16 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {  Routes, Route } from "react-router-dom";
 import Register from "../pages/Register";
 import Main from "../pages/Main";
 import Login from "../pages/Login";
 import PrivateRouter from "./PrivateRouter";
 import MovieDetail from "../pages/MovieDetail";
 import MyNavbar from "../companents/MyNavbar";
+import Watchlist from "../pages/Watchlist";
 
 const AppRouter = () => {
   return (
-    <BrowserRouter>
+    <>
      <MyNavbar />
 
       <Routes>  
@@ -20,11 +21,12 @@ const AppRouter = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route element={<PrivateRouter />}>
+        <Route path="/watchlist" element={<Watchlist/>}/>
           <Route path="/details/:id" element={<MovieDetail/>}/>
           
         </Route>
       </Routes>
-    </BrowserRouter>
+    </>
   );
 };
 

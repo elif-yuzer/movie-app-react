@@ -4,19 +4,22 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const MovieDetail = () => {
-  const { imgUrl, api_key } = useContext(MovieContext);
-  const navigate = useNavigate();
+  const { imgUrl, api_key ,addWatch} = useContext(MovieContext);
 
+  const navigate = useNavigate();
   const { id } = useParams();
   const { state } = useLocation();
 
   const [videoKey, setVideoKey] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const videoUrl = useMemo(() => {
-    if (!id || !api_key) return "";
-    return `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${api_key}`;
-  }, [id, api_key]);
+  const videoUrl =
+    (() => {
+      if (!id || !api_key) return "";
+
+      return `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${api_key}`;
+    },
+    [id, api_key]);
 
   const getVideo = async () => {
     try {
@@ -30,9 +33,7 @@ const MovieDetail = () => {
         return;
       }
 
-      
       const teaser = results.find((v) => v.type === "Teaser");
-      const trailer = results.find((v) => v.type === "Trailer");
       const chosen = teaser || trailer || results[0];
 
       setVideoKey(chosen?.key || "");
@@ -44,11 +45,18 @@ const MovieDetail = () => {
 
   useEffect(() => {
     getVideo();
-  
   }, [videoUrl]);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
+
+   const handleaddWatchList =(e,state)=>{
+    console.log("WATCHLIST CLICK", state.id);
+   e.stopPropagation()
+   addWatch(state)
+   
+
+  }
 
   return (
     <div className="bg-base-100 shadow-sm rounded-xl overflow-hidden max-w-3xl mx-auto flex flex-col md:flex-row">
@@ -62,7 +70,10 @@ const MovieDetail = () => {
 
       <div className="p-5 flex-1 flex flex-col gap-3">
         <h2 className="text-xl font-semibold">{state?.title}</h2>
-        <p className="text-sm opacity-80">{state?.overview}</p>
+        <p className="text-sm opacity-80 ">{state?.overview}</p>
+        <p className="text-gray-500 text-sm   rounded-l p-4 text-center rounded-2xl tracking-tightermix-blend-soft-light ">
+          Release {state?.release_date}
+        </p>
 
         <div className="mt-auto flex flex-col gap-2 justify-end">
           <button
@@ -80,6 +91,31 @@ const MovieDetail = () => {
           >
             Watch fragman
           </button>
+          <div className="flex justify-center ">
+            <button
+              type="button"
+              onClick={(e) => handleaddWatchList(e, state)}
+              className="inline-flex items-center justify-center gap-2 px-6 py-2 border-2 rounded-2xl cursor-pointer hover:text-blue-400"
+            >
+              <span className=" inline-block text-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+              </span>
+              Watchlist
+            </button>
+          </div>
         </div>
       </div>
 
@@ -88,10 +124,7 @@ const MovieDetail = () => {
           className="fixed inset-0 bg-black/80 z-50 flex justify-center items-center p-4"
           onClick={closeModal}
         >
-          <div
-            className="relative w-full max-w-4xl aspect-video"
-          
-          >
+          <div className="relative w-full max-w-4xl aspect-video">
             {videoKey ? (
               <iframe
                 className="w-full h-full rounded-xl"
@@ -102,7 +135,7 @@ const MovieDetail = () => {
               />
             ) : (
               <div className="w-full h-full rounded-xl bg-black flex items-center justify-center text-white">
-                Video yok / yüklenemedi
+                Video yok veya yüklenemedi
               </div>
             )}
 

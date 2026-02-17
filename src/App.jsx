@@ -2,7 +2,8 @@ import React, { useContext } from 'react'
 import AppRouter from "./router/AppRouter";
 import AuthProvider from "./context/AuthProvider";
 import MovieProvider from './context/MovieProvider';
- // yolu senin proje yapına göre düzelt
+import { ToastContainer } from 'react-toastify';
+ 
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
     <AuthProvider>
     <MovieProvider>
       <AppRouter />
+      <ToastContainer/>
       </MovieProvider>
       
     </AuthProvider>

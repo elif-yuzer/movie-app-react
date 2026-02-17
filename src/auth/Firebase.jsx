@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import.meta.env.TMDBapiKey
+import { getFirestore } from "firebase/firestore";
 
 
 
@@ -12,10 +13,11 @@ const firebaseConfig = {
   messagingSenderId: import.meta.env.VITE_APP_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_APP_APP_ID,
 }
-  
-console.log(import.meta.env.VITE_APP_API_KEY);
+/*   
+console.log(import.meta.env.VITE_APP_API_KEY); */
 
 
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
+export const db = getFirestore(app);

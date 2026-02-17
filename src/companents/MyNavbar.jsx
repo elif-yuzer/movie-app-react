@@ -1,17 +1,21 @@
 import React, { useContext } from "react";
 import profileImg from "../assets/developer.jpg";
+import { Fragment } from "react";
 
 import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
+  TabGroup,
+  TabList,
+  Tab,
   Menu,
   MenuButton,
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
 
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { AuthContext } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
 
@@ -22,33 +26,73 @@ function classNames(...classes) {
 const userNavigation = [
   { name: "Register", href: "/register" },
   { name: "Login", href: "/login" },
-  /* { name: "Logout", href: "/login" }, */
+
 ];
 
 const MyNavbar = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
-  const {currentUser,handleLogOut}=useContext(AuthContext)
+  const { currentUser, handleLogOut } = useContext(AuthContext);
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 items-center justify-between">
-             
-              <h1 className="text-lg font-semibold tracking-wide text-white">
+              <h1
+                onClick={() => navigate("/")}
+                className="text-lg cursor-pointer font-semibold tracking-wide text-white"
+              >
                 MOVIE APP
               </h1>
 
-          
+              <TabGroup>
+                <TabList className="flex items-center gap-3">
+                  <Tab as={Fragment}>
+                    {({ selected }) => (
+                      <button
+                        className={classNames(
+                          "px-3 py-2 rounded-lg text-sm font-medium text-gray-200 hover:bg-white/10 transition",
+                          selected && "bg-blue-600 text-white",
+                        )}
+                      >
+                        Trendler
+                      </button>
+                    )}
+                  </Tab>
+
+                  <Tab as={Fragment}>
+                    {({ selected }) => (
+                      <button
+                        className={classNames(
+                          "px-3 py-2 rounded-lg text-sm font-medium text-gray-200 hover:bg-white/10 transition",
+                          selected && "bg-blue-600 text-white",
+                        )}
+                      >
+                        IMDB
+                      </button>
+                    )}
+                  </Tab>
+                  <Tab as={Fragment}>
+                    {({ selected }) => (
+                      <button type="button" onClick={()=>navigate("/watchlist")}
+                        className={classNames(
+                          "px-3 py-2 rounded-lg text-sm font-medium text-gray-200 hover:bg-white/10 transition",
+                          selected && "bg-blue-600 text-white",
+                        )}
+                      >
+                        MyWatchList
+                      </button> 
+                    )}
+                  </Tab>
+                </TabList>
+              </TabGroup>
+
               <div className="flex items-center gap-2">
-         
-                
-            
                 <Menu as="div" className="relative">
-                  <MenuButton  className="flex items-center gap-2 rounded-full px-2 py-1 hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+                  <MenuButton className="flex items-center gap-2 rounded-full px-2 py-1 hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                     <span className="text-sm font-medium text-gray-200">
-                     {currentUser?.email.slice(0,4)  }
+                      {currentUser?.email.slice(0, 4)}
                     </span>
                     <img
                       src={profileImg}
@@ -65,7 +109,7 @@ const MyNavbar = () => {
                             href={item.href}
                             className={classNames(
                               focus ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700"
+                              "block px-4 py-2 text-sm text-gray-700",
                             )}
                           >
                             {item.name}
@@ -73,23 +117,25 @@ const MyNavbar = () => {
                         )}
                       </MenuItem>
                     ))}
-                    <MenuItem >
-                        {({ focus }) => (
-                          <span
-                            onClick={()=>{ handleLogOut();  navigate("/home");}}
-                            className={classNames(
-                              focus ? "bg-gray-100" : "",
-                              "block px-4 py-2 text-sm text-gray-700 cursor-pointer"
-                            )}
-                          >
-                           logout
-                          </span>
-                        )}
-                      </MenuItem>
+                    <MenuItem>
+                      {({ focus }) => (
+                        <span
+                          onClick={() => {
+                            handleLogOut();
+                            navigate("/home");
+                          }}
+                          className={classNames(
+                            focus ? "bg-gray-100" : "",
+                            "block px-4 py-2 text-sm text-gray-700 cursor-pointer",
+                          )}
+                        >
+                          logout
+                        </span>
+                      )}
+                    </MenuItem>
                   </MenuItems>
                 </Menu>
 
-            
                 <DisclosureButton className="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-300 hover:bg-white/5 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500">
                   <span className="sr-only">Open menu</span>
                   {open ? (
@@ -102,7 +148,6 @@ const MyNavbar = () => {
             </div>
           </div>
 
-          
           <DisclosurePanel className="md:hidden border-t border-white/10">
             <div className="px-4 py-3">
               <div className="space-y-1">
