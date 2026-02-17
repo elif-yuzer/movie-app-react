@@ -8,6 +8,7 @@ import {
 import { GoogleAuthProvider } from "firebase/auth";
 import { signInWithPopup } from "firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { toastError, toastSuccess, toastWarn } from "../helpers/ToastNotify";
 
 
 
@@ -17,7 +18,7 @@ const AuthProvider = ({ children }) => {
   //*firebase den gelen veri nesne o yuzden null
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [togglemesaj, setTogglemesaj] = useState(false);
+
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -32,8 +33,10 @@ const AuthProvider = ({ children }) => {
       setLoading(true);
 
       await createUserWithEmailAndPassword(auth, email, password);
+      toastSuccess("Registered Successfully");
+      navigate("/");
     } catch (error) {
-      console.log("Şifre veya kullanıcı adı hatalı", error);
+     /*  console.log("Şifre veya kullanıcı adı hatalı", error); */
     }
     setLoading(false);
   };
@@ -43,6 +46,8 @@ const AuthProvider = ({ children }) => {
       setLoading(true);
 
       await signInWithEmailAndPassword(auth, email, password);
+      toastSuccess("Logged in")
+       navigate("/");
     } catch (error) {
       console.log("Şifre veya kullanıcı adı hatalı", error.message);
     }
@@ -59,30 +64,32 @@ const AuthProvider = ({ children }) => {
   const handleLogOut = async () => {
     await signOut(auth)
       .then(() => {
-        console.log("logout basarılı");
+        /* console.log("logout basarılı"); */
+        toastSuccess("Logged Out")
       })
       .catch((error) => {
         console.log("logout basarısz", error);
       });
   };
 
+  
   const handleResetPass = async (email) => {
     try {
       await sendPasswordResetEmail(auth, email);
-      setTogglemesaj(true)
-      setTimeout(()=>{
-
-        setTogglemesaj(false)
-
-      },100)
+      if(!email) {
+        toastWarn("Please enter your email")
+      }else if (email){
+        toastSuccess("Password reset request sent.")
+      }
+      
 
       
-    } catch(error){
-        setTogglemesaj(false)
+    } catch(error){ 
         
+        toastWarn("Could not send reset email.");
     }
    
-setTogglemesaj(true)
+
     
   };
 
@@ -97,8 +104,8 @@ setTogglemesaj(true)
         loading,
         setLoading,
         handleLogOut,
-        handleResetPass,
-        togglemesaj
+        handleResetPass
+    
       }}
     >
       {children}

@@ -4,17 +4,18 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 const MovieCard = () => {
-  const { film, imgUrl } = useContext(MovieContext);
+  const { film, imgUrl, sortIMDB } = useContext(MovieContext);
+  console.log(sortIMDB.length);
   const navigate = useNavigate();
 
- 
+  const displayMovies = sortIMDB.length > 0 ? sortIMDB : film;
 
-
-  console.log(film);
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-      {film?.length > 0 ? (
-        film.map((a) => (
+
+    
+      {displayMovies?.length > 0 ? (
+        displayMovies.map((a) => (
           <div
             onClick={() => navigate(`/details/${a.id}`, { state: a })}
             key={a.id}
@@ -33,7 +34,6 @@ const MovieCard = () => {
                 <div>
                   <h2 className="card-title">{a.title}</h2>
                 </div>
-              
 
                 <div
                   className="badge badge-primary badge-lg ms-auto border border-transparent rounded px-3 py-2
@@ -56,7 +56,7 @@ const MovieCard = () => {
                     <p className="text-gray-500 text-sm   bg-amber-50 rounded-l p-4 text-center rounded-2xl tracking-tightermix-blend-soft-light ">
                       {a.overview}
                     </p>
-                   
+                    <span>{a.release_date}</span>
                   </div>
                 </div>
               </div>

@@ -17,7 +17,9 @@ const MovieProvider = ({ children }) => {
 
   const [film, setFilm] = useState([]);
   const [enteredFilm, setEnteredFilm] = useState("");
-   const [myMovies,setMyMovies]=useState([])
+  const [myMovies, setMyMovies] = useState([]);
+  const [sortIMDB,setSortIMDB]=useState([])
+  const [sortRelease,setSortRelease]=useState([])
   /* console.log(enteredFilm); */
 
   const url = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}`;
@@ -71,7 +73,7 @@ const MovieProvider = ({ children }) => {
         id: movie.id,
         title: movie.title,
         overview: movie.overview,
-        poster_path: movie.poster_path ?? null, 
+        poster_path: movie.poster_path ?? null,
         poster_url: movie.poster_path ? `${imgUrl}${movie.poster_path}` : null,
         vote_average: movie.vote_average,
         " release_date": movie.release_date,
@@ -79,7 +81,7 @@ const MovieProvider = ({ children }) => {
       };
 
       await setDoc(movieRef, veriler);
-      
+
       console.log(
         "📌 Yazılacak path:",
         `users/${currentUser.uid}/watchlist/${movie.id}`,
@@ -87,39 +89,48 @@ const MovieProvider = ({ children }) => {
     } catch (error) {
       console.log("Firestore hata:", error.code, error.message);
     }
-     toastSuccess("watchlist'e eklendi")
+    toastSuccess("watchlist'e eklendi");
   };
 
   const handleGetfromFireBase = () => {
+    if (!currentUser?.uid) {
+      return;
+    }
+
+    const path = collection(db, "users", currentUser.uid, "watchlist");
+
+    return onSnapshot(path, (querySnapShot) => {
+      const yenilist = querySnapShot.docs.map((d) => ({
+        id: d.id,
+        ...d.data(),
+      }));
+      setMyMovies(yenilist);
+    });
+  };
+
+  useEffect(() => {
+    if (!currentUser?.uid) {
+      setMyMovies([]);
+      return;
+    }
+
+    const unsubscribe = handleGetfromFireBase();
+
+    return unsubscribe;
+  }, [currentUser?.uid]);
+
+const sortMovies=()=>{
+  const sortMovie=film.sort((b,a)=> a.vote_average - b.vote_average)
+    
   
+  setSortIMDB(sortMovie)
+}
 
-  if (!currentUser?.uid) {
-    return;
-  }
+const  handleSortRelease=()=>{
+  const sortRelease=film.sort((a,b)=>new Date(b.release_date) - new Date(a.release_date))
+  setSortRelease(sortRelease)
 
-  const path = collection(db, "users", currentUser.uid, "watchlist");
-
- return onSnapshot(path, (querySnapShot) => {
-  const yenilist = querySnapShot.docs.map((d) => ({
-    id: d.id,
-    ...d.data(),
-  }));
-  setMyMovies(yenilist);
-});
-};
-
-useEffect(() => {
-  if (!currentUser?.uid) {
-     setMyMovies([])
-     return
-  }
-   
-
-     const unsubscribe=   handleGetfromFireBase()
-   
-    return unsubscribe
-
-},[currentUser?.uid])
+}
 
   return (
     <MovieContext.Provider
@@ -136,7 +147,10 @@ useEffect(() => {
         addWatch,
         setMyMovies,
         myMovies,
-        addWatch
+        addWatch,
+        sortMovies,
+        sortIMDB,
+        handleSortRelease
       }}
     >
       {children}

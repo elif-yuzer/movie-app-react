@@ -17,7 +17,8 @@ import {
 
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { AuthContext } from "../context/AuthProvider";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { MovieContext } from "../context/MovieProvider";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -31,8 +32,9 @@ const userNavigation = [
 
 const MyNavbar = () => {
   const navigate = useNavigate();
-
+ 
   const { currentUser, handleLogOut } = useContext(AuthContext);
+  const {sortMovies}=useContext(MovieContext)
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -50,20 +52,20 @@ const MyNavbar = () => {
                 <TabList className="flex items-center gap-3">
                   <Tab as={Fragment}>
                     {({ selected }) => (
-                      <button
+                      <button type="button" onclick={()=>handleSortRelease()}
                         className={classNames(
                           "px-3 py-2 rounded-lg text-sm font-medium text-gray-200 hover:bg-white/10 transition",
                           selected && "bg-blue-600 text-white",
                         )}
                       >
-                        Trendler
+                        Son Eklenenler
                       </button>
                     )}
                   </Tab>
 
                   <Tab as={Fragment}>
                     {({ selected }) => (
-                      <button
+                      <button type="button" onClick={()=>sortMovies()}
                         className={classNames(
                           "px-3 py-2 rounded-lg text-sm font-medium text-gray-200 hover:bg-white/10 transition",
                           selected && "bg-blue-600 text-white",

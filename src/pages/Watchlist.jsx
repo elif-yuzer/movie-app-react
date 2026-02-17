@@ -5,11 +5,13 @@ import { useContext } from 'react'
 const Watchlist = () => {
 
     const {myMovies}=useContext(MovieContext)
+  
    /*  console.log(myMovies); */
    
     
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+    
       {myMovies?.length > 0 ? (
         myMovies.map((a) => (
           <div

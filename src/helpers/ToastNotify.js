@@ -3,8 +3,9 @@ import { toast } from "react-toastify";
 
 export const toastSuccess = (msg) => {
   toast.success(msg, {
-    autoClose: 5000,
+    autoClose: 3000,
     hideProgressBar: false,
+    
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
