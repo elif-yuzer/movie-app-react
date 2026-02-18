@@ -52,7 +52,7 @@ const MyNavbar = () => {
                 <TabList className="flex items-center gap-3">
                   <Tab as={Fragment}>
                     {({ selected }) => (
-                      <button type="button" onclick={()=>handleSortRelease()}
+                      <button type="button" onClick={()=>handleSortRelease()}
                         className={classNames(
                           "px-3 py-2 rounded-lg text-sm font-medium text-gray-200 hover:bg-white/10 transition",
                           selected && "bg-blue-600 text-white",

@@ -55,8 +55,8 @@ const MovieProvider = ({ children }) => {
       return;
     }
     try {
-      console.log("✅ addWatch çağrıldı:", movie?.id);
-      console.log("✅ currentUser:", currentUser);
+      /* console.log("✅ addWatch çağrıldı:", movie?.id);
+      console.log("✅ currentUser:", currentUser); */
 
       const movieRef = doc(
         db,

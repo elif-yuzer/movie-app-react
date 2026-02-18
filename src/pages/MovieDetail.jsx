@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 import { MovieContext } from "../context/MovieProvider";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toastError } from "../helpers/ToastNotify";
 
 const MovieDetail = () => {
   const { imgUrl, api_key ,addWatch} = useContext(MovieContext);
@@ -13,32 +14,29 @@ const MovieDetail = () => {
   const [videoKey, setVideoKey] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
-  const videoUrl =
-    (() => {
-      if (!id || !api_key) return "";
-
-      return `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${api_key}`;
-    },
-    [id, api_key]);
+  const videoUrl = () => {
+  if (!id || !api_key) return "";
+  return `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${api_key}`;
+};
 
   const getVideo = async () => {
     try {
-      if (!videoUrl) return;
+      if (!videoUrl()) return;
 
-      const res = await axios.get(videoUrl);
+      const res = await axios.get(videoUrl());
       const results = res?.data?.results ?? [];
 
       if (results.length === 0) {
         setVideoKey("");
         return;
       }
-
+      
       const teaser = results.find((v) => v.type === "Teaser");
-      const chosen = teaser || trailer || results[0];
+      const chosen = teaser  || results[0];
 
       setVideoKey(chosen?.key || "");
     } catch (error) {
-      alert("Video bulunamadı.");
+      toastError("Not found")
       setVideoKey("");
     }
   };
@@ -91,6 +89,8 @@ const MovieDetail = () => {
           >
             Watch fragman
           </button>
+
+          
           <div className="flex justify-center ">
             <button
               type="button"
@@ -141,7 +141,7 @@ const MovieDetail = () => {
 
             <button
               onClick={closeModal}
-              className="absolute top-4 right-4 rounded-xl bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 active:scale-[0.98]"
+              className="absolute top-4 cursor-pointer right-4 rounded-xl bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 active:scale-[0.98]"
             >
               Kapat
             </button>
