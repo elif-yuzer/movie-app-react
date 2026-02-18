@@ -10,7 +10,7 @@ const PrivateRouter = () => {
 
   if(loading){
     
-  return <h1>Yükleniyor...</h1>;
+  return <h1>Yükleniyor....</h1>;
   }
 
 

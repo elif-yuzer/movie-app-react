@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const MovieCard = () => {
   const { film, imgUrl, sortIMDB } = useContext(MovieContext);
-  console.log(sortIMDB.length);
+ /*  console.log(sortIMDB.length); */
   const navigate = useNavigate();
 
   const displayMovies = sortIMDB.length > 0 ? sortIMDB : film;

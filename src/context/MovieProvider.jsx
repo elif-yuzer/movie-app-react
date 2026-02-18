@@ -18,35 +18,31 @@ const MovieProvider = ({ children }) => {
   const [film, setFilm] = useState([]);
   const [enteredFilm, setEnteredFilm] = useState("");
   const [myMovies, setMyMovies] = useState([]);
-  const [sortIMDB,setSortIMDB]=useState([])
-  const [sortRelease,setSortRelease]=useState([])
-  const [loading,setLoading]=useState(false)
+  const [sortIMDB, setSortIMDB] = useState([]);
+  const [sortRelease, setSortRelease] = useState([]);
+  const [loading, setLoading] = useState(false);
   /* console.log(enteredFilm); */
 
-  const url = `https://api.themoviedb.org/3/search/movie?api_key=${api_key}`;
+  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}`;
   /* console.log(url) */
- const getData = async (url) => {
-  setLoading(true);
-  try {
-    const res = await axios.get(url);
-    const { page, results } = res.data;
-  /*   console.log(page);
+  const getData = async (url) => {
+    setLoading(true);
+    try {
+      const res = await axios.get(url);
+      const { page, results } = res.data;
+      /*   console.log(page);
     console.log(results); */
-    setFilm(results);
-  } catch (err) {
-    console.error(err);
-  } finally {
-    setLoading(false);
-  }
-};
-
-
-
-
+      setFilm(results);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     getData(url);
-  }, [setFilm]);
+  }, [url]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -67,8 +63,6 @@ const MovieProvider = ({ children }) => {
       return;
     }
     try {
-      
-
       const movieRef = doc(
         db,
         "users",
@@ -76,8 +70,6 @@ const MovieProvider = ({ children }) => {
         "watchlist",
         movie.id.toString(),
       );
-
-    
 
       const veriler = {
         id: movie.id,
@@ -91,8 +83,6 @@ const MovieProvider = ({ children }) => {
       };
 
       await setDoc(movieRef, veriler);
-
-     
     } catch (error) {
       console.log("Firestore hata:", error.code, error.message);
     }
@@ -126,18 +116,18 @@ const MovieProvider = ({ children }) => {
     return unsubscribe;
   }, [currentUser?.uid]);
 
-const sortMovies=()=>{
-  const sortMovie=film.sort((b,a)=> a.vote_average - b.vote_average)
-    
-  
-  setSortIMDB(sortMovie)
-}
+  const sortMovies = () => {
+    const sortMovie = film.sort((b, a) => a.vote_average - b.vote_average);
 
-const  handleSortRelease=()=>{
-  const sortRelease=film.sort((a,b)=>new Date(b.release_date) - new Date(a.release_date))
-  setSortRelease(sortRelease)
+    setSortIMDB(sortMovie);
+  };
 
-}
+  const handleSortRelease = () => {
+    const sortRelease = film.sort(
+      (a, b) => new Date(b.release_date) - new Date(a.release_date),
+    );
+    setSortRelease(sortRelease);
+  };
 
   return (
     <MovieContext.Provider
@@ -154,10 +144,9 @@ const  handleSortRelease=()=>{
         addWatch,
         setMyMovies,
         myMovies,
-        addWatch,
         sortMovies,
         sortIMDB,
-        handleSortRelease
+        handleSortRelease,
       }}
     >
       {children}

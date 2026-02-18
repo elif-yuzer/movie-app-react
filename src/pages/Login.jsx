@@ -2,11 +2,12 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
 import bgImage from '../assets/denise-jans-Lq6rcifGjOU-unsplash.jpg'
+import { toastError, toastSuccess } from "../helpers/ToastNotify";
 
 
 const Login = () => {
 
-  const { handleLogin, currentUser, handleResetPass,togglemesaj } =
+  const { handleLogin, currentUser, handleResetPass, handleWithGoogle } =
     useContext(AuthContext);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -14,9 +15,22 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await handleLogin(email, password);
-    currentUser ? navigate("/home") : navigate("/login");
+    try {
+      await handleLogin(email, password);
+      toastSuccess("Logged in successfully");
+      currentUser && navigate("/main");
+      
+    } catch (error) {
+     toastError("Login failed", error.message); 
+      
+    }
+  
   };
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/main");
+    }
+  }, [currentUser, navigate]);
 
   return (
     <div className="flex min-h-screen w-full bg-zinc-300"  >
@@ -62,7 +76,7 @@ const Login = () => {
 
       <div className="divider text-xs text-slate-500">or</div>
 
-      <button className="w-full flex items-center justify-center gap-3 rounded-lg bg-slate-100 py-3 font-bold text-slate-900 hover:bg-white transition-all active:scale-[0.98]">
+      <button onClick={()=>{handleWithGoogle(); navigate("/main")}} className="w-full flex items-center justify-center gap-3 rounded-lg bg-slate-100 py-3 font-bold text-slate-900 hover:bg-white transition-all active:scale-[0.98]">
         <span className="text-xl">G</span>
        Continue with Google
       </button>
