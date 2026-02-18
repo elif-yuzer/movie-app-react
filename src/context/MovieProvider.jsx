@@ -20,18 +20,30 @@ const MovieProvider = ({ children }) => {
   const [myMovies, setMyMovies] = useState([]);
   const [sortIMDB,setSortIMDB]=useState([])
   const [sortRelease,setSortRelease]=useState([])
+  const [loading,setLoading]=useState(false)
   /* console.log(enteredFilm); */
 
-  const url = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}`;
+  const url = `https://api.themoviedb.org/3/search/movie?api_key=${api_key}`;
   /* console.log(url) */
-  const getData = async (url) => {
+ const getData = async (url) => {
+  setLoading(true);
+  try {
     const res = await axios.get(url);
-
     const { page, results } = res.data;
-    console.log(page);
-    console.log(results);
+  /*   console.log(page);
+    console.log(results); */
     setFilm(results);
-  };
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
+
+
   useEffect(() => {
     getData(url);
   }, [setFilm]);
@@ -55,8 +67,7 @@ const MovieProvider = ({ children }) => {
       return;
     }
     try {
-      /* console.log("✅ addWatch çağrıldı:", movie?.id);
-      console.log("✅ currentUser:", currentUser); */
+      
 
       const movieRef = doc(
         db,
@@ -66,8 +77,7 @@ const MovieProvider = ({ children }) => {
         movie.id.toString(),
       );
 
-      console.log("Fonksiyon başladı");
-      console.log("Kullanıcı:", currentUser.uid);
+    
 
       const veriler = {
         id: movie.id,
@@ -82,10 +92,7 @@ const MovieProvider = ({ children }) => {
 
       await setDoc(movieRef, veriler);
 
-      console.log(
-        "📌 Yazılacak path:",
-        `users/${currentUser.uid}/watchlist/${movie.id}`,
-      );
+     
     } catch (error) {
       console.log("Firestore hata:", error.code, error.message);
     }

@@ -6,24 +6,36 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
-import { signInWithPopup } from "firebase/auth";
+import { signInWithPopup, updateProfile } from "firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { toastError, toastSuccess, toastWarn } from "../helpers/ToastNotify";
+import { useNavigate } from "react-router-dom";
 
 
 
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
   //*firebase den gelen veri nesne o yuzden null
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
 
   useEffect(() => {
+
     onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-      setLoading(false);
+      if(user){
+        const {email,photoURL,displayName}=user
+        setCurrentUser({
+          email:email,
+          photoURL:photoURL,
+          displayName:displayName
+        })
+      }else {
+        setCurrentUser(false)
+      }
+      
     });
   }, []);
 
@@ -33,7 +45,9 @@ const AuthProvider = ({ children }) => {
       setLoading(true);
 
       await createUserWithEmailAndPassword(auth, email, password);
+      setCurrentUser(auth.currentUser)
       toastSuccess("Registered Successfully");
+        await updateProfile(auth?.currentUser, { displayName: email.split("@")[0] });
       navigate("/");
     } catch (error) {
      /*  console.log("Şifre veya kullanıcı adı hatalı", error); */
@@ -46,7 +60,9 @@ const AuthProvider = ({ children }) => {
       setLoading(true);
 
       await signInWithEmailAndPassword(auth, email, password);
+      setCurrentUser(auth.currentUser)
       toastSuccess("Logged in")
+       await updateProfile(auth?.currentUser, { displayName: email.split("@")[0] });
        navigate("/");
     } catch (error) {
       console.log("Şifre veya kullanıcı adı hatalı", error.message);
@@ -89,8 +105,6 @@ const AuthProvider = ({ children }) => {
         toastWarn("Could not send reset email.");
     }
    
-
-    
   };
 
   return (
@@ -104,7 +118,8 @@ const AuthProvider = ({ children }) => {
         loading,
         setLoading,
         handleLogOut,
-        handleResetPass
+        handleResetPass,
+       
     
       }}
     >

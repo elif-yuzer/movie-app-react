@@ -69,8 +69,11 @@ const MovieDetail = () => {
       <div className="p-5 flex-1 flex flex-col gap-3">
         <h2 className="text-xl font-semibold">{state?.title}</h2>
         <p className="text-sm opacity-80 ">{state?.overview}</p>
-        <p className="text-gray-500 text-sm   rounded-l p-4 text-center rounded-2xl tracking-tightermix-blend-soft-light ">
-          Release {state?.release_date}
+        <p className="text-gray-500 text-sm   rounded-l p-2 text-center rounded-2xl tracking-tightermix-blend-soft-light ">
+          Release_Date:   {state?.release_date}
+        </p>
+        <p className="text-gray-500 text-sm   rounded-l  text-center rounded-2xl tracking-tightermix-blend-soft-light ">
+         Vote:   {state?.vote_count}
         </p>
 
         <div className="mt-auto flex flex-col gap-2 justify-end">

@@ -12,8 +12,6 @@ const MovieCard = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-
-    
       {displayMovies?.length > 0 ? (
         displayMovies.map((a) => (
           <div
@@ -36,10 +34,10 @@ const MovieCard = () => {
                 </div>
 
                 <div
-                  className="badge badge-primary badge-lg ms-auto border border-transparent rounded px-3 py-2
-                  focus:outline-none
-                  focus:ring-2 focus:ring-blue-500
-                  focus:ring-offset-2 focus:ring-offset-white bg-blue-600 text-xl"
+                  className={`badge badge-lg ms-auto border border-transparent rounded px-3 py-2
+    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white text-xl
+    ${Number(a?.vote_average ?? 0) > 7 ? "bg-blue-600" : "bg-fuchsia-200"}
+  `}
                 >
                   {Number(a.vote_average ?? 0).toFixed(1)}
                 </div>
@@ -64,7 +62,7 @@ const MovieCard = () => {
           </div>
         ))
       ) : (
-        <h2 className="text-white">Filmler aranıyor veya bulunamadı... 🎥</h2>
+        <h2 className="text-white ">Filmler aranıyor veya bulunamadı... 🎥</h2>
       )}
     </div>
   );

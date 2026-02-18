@@ -11,6 +11,8 @@ const Main = () => {
     getData(url);
   }, []);
 
+ 
+
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col gap-3 ">
       <div className="flex justify-center items-center">
@@ -22,13 +24,13 @@ const Main = () => {
             >
               <input
                 type="text"
-                placeholder="Search a movie"
+                placeholder="Search a movie..."
                 className="  w-full rounded-xl border text-lime-50 border-gray-200 px-4 py-2 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 autoFocus
                 onChange={(e) => setEnteredFilm(e.target.value)}
                 value={enteredFilm}
               />
-              <button className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 active:scale-[0.98]">
+              <button type="submit" className="rounded-xl bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 active:scale-[0.98]">
                 Search
               </button>
             </form>

@@ -33,8 +33,8 @@ const userNavigation = [
 const MyNavbar = () => {
   const navigate = useNavigate();
  
-  const { currentUser, handleLogOut } = useContext(AuthContext);
-  const {sortMovies}=useContext(MovieContext)
+  const { currentUser, handleLogOut} = useContext(AuthContext);
+  const {sortMovies,handleSortRelease}=useContext(MovieContext)
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -52,7 +52,7 @@ const MyNavbar = () => {
                 <TabList className="flex items-center gap-3">
                   <Tab as={Fragment}>
                     {({ selected }) => (
-                      <button type="button" onClick={()=>handleSortRelease()}
+                      <button type="button" onClick={()=>{handleSortRelease(); navigate("/");}}
                         className={classNames(
                           "px-3 py-2 rounded-lg text-sm font-medium text-gray-200 hover:bg-white/10 transition",
                           selected && "bg-blue-600 text-white",
@@ -65,7 +65,7 @@ const MyNavbar = () => {
 
                   <Tab as={Fragment}>
                     {({ selected }) => (
-                      <button type="button" onClick={()=>sortMovies()}
+                     <button type="button" onClick={()=>{sortMovies(); navigate("/");}}
                         className={classNames(
                           "px-3 py-2 rounded-lg text-sm font-medium text-gray-200 hover:bg-white/10 transition",
                           selected && "bg-blue-600 text-white",
@@ -94,7 +94,7 @@ const MyNavbar = () => {
                 <Menu as="div" className="relative">
                   <MenuButton className="flex items-center gap-2 rounded-full px-2 py-1 hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                     <span className="text-sm font-medium text-gray-200">
-                      {currentUser?.email.slice(0, 4)}
+                      {currentUser?.displayName}
                     </span>
                     <img
                       src={profileImg}
