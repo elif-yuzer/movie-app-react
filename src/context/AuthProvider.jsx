@@ -61,8 +61,8 @@ const AuthProvider = ({ children }) => {
     await signInWithPopup(auth, provider);
   };
 
-  const handleLogOut = async () => {
-    await signOut(auth)
+  const handleLogOut =  () => {
+     signOut(auth)
       .then(() => {
         /* console.log("logout basarılı"); */
         toastSuccess("Logged Out")
