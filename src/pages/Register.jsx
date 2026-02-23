@@ -1,74 +1,75 @@
-import { AuthContext } from "../context/AuthProvider";
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import bgImage from "../assets/denise-jans-Lq6rcifGjOU-unsplash.jpg";
+import bgImg from "../assets/bgimage.jpg";
+import AuthContext from "../context/AuthContext";
 
 const Register = () => {
-  const { register, handleWithGoogle } = useContext(AuthContext);
+  const { handleRegister, currentUser } = useContext(AuthContext);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await register(email, password);
 
-    navigate("/home");
+    await handleRegister(firstName, lastName, email, password);
   };
 
-  const googleSignUp = async () => {
-    await handleWithGoogle();
-    navigate("/home");
-  };
   return (
-    <div className="flex min-h-screen w-full bg-zinc-300">
-    
-      <div className="w-full md:w-1/2 flex items-center justify-center p-4">
-        <div className="relative w-full max-w-sm rounded-xl bg-white/10 backdrop-blur-xl shadow-2xl p-8 ring-1 ring-white/10">
-          <h2 className="text-3xl font-semibold text-red-500 mb-8 text-center">
-            Sign up
-          </h2>
+    <div
+      className=" bg-cover bg-center bg-no-repeat min-h-screen w-full flex items-center fixed justify-center bg-zinc-300 "
+      style={{ backgroundImage: `url(${bgImg})` }}
+    >
+      <div className=" md:w-1/2 ">
+        <div className=" bg-gray-900/70 max-w-md rounded-2xl backdrop-blur-xl shadow-2xl p-10 border border-slate-700 text-slate-100">
+          <h2 className="text-4xl font-bold text-white mb-4">Register</h2>
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="flex flex-col gap-5 h-auto" onSubmit={handleSubmit}>
+            <div>
+              <input
+                className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 outline-none focus:border-red-500 transition-all"
+                placeholder="FirstName"
+                type="text"
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
+            <div>
+              <input
+                className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 outline-none focus:border-red-500 transition-all"
+                placeholder="LastName"
+                type="text"
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
+
             <input
-              className="w-full bg-transparent border-b border-red-500/60 py-2 text-gray-900 placeholder-slate-500 outline-none focus:border-red-500"
-              placeholder="Email"
+              className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 outline-none focus:border-red-500 transition-all"
+              placeholder="E-mail adress"
               type="email"
               onChange={(e) => setEmail(e.target.value)}
             />
 
             <input
-              className="w-full bg-transparent border-b border-red-500/60 py-2 text-gray-900 placeholder-slate-500 outline-none focus:border-red-500"
+              className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 outline-none focus:border-red-500 transition-all"
               placeholder="Password"
               type="password"
               onChange={(e) => setPassword(e.target.value)}
             />
 
-            <div className="flex flex-col gap-4">
-              <button className="w-full rounded-md bg-red-500 py-3 font-semibold text-lime-50 hover:bg-red-600 transition-all">
-                Register
+            <div className="mt-4 space-y-3">
+              <button
+                type="submit"
+                className="w-full rounded-lg bg-gray-400 py-3 font-bold text-white hover:bg-gray-700  shadow-lg shadow-red-900/20 transition-all active:scale-[0.98]"
+              >
+                Sign Up
               </button>
 
-              <button
-                type="button"
-                onClick={googleSignUp}
-                className="relative w-full rounded-md bg-red-600 py-3 font-semibold text-lime-50 hover:bg-red-700 transition-all"
-              >
-                Continue with Google
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 font-bold">G</span>
-              </button>
+              <div></div>
             </div>
           </form>
         </div>
-      </div>
-
-      
-      <div
-        className="hidden md:block md:w-1/2 h-screen bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${bgImage})` }}
-      >
-  
-        <div className="w-full h-full bg-black/10"></div>
       </div>
     </div>
   );

@@ -1,33 +1,20 @@
-import React, { useContext } from "react";
-import AuthProvider, { AuthContext } from "../context/AuthProvider";
-
-import { Outlet } from "react-router-dom";
-import { Navigate } from "react-router-dom";
-
+import React from 'react'
+import { useContext } from 'react'
+import  AuthContext  from '../context/AuthContext'
+import { Navigate, Outlet } from 'react-router-dom'
 
 const PrivateRouter = () => {
-  const {currentUser,loading}=useContext(AuthContext)
-
-  if(loading){
-    
-  return <h1>Yükleniyor....</h1>;
+  const {currentUser,loading}= useContext(AuthContext)
+  if (loading) {
+    return <span className="loading loading-spinner loading-xs"></span>
   }
-
-
-
-
   return currentUser ? (
-    <>
-      
-  
-  
-      <Outlet /> 
-    
-    </>
-    
-  ) : (
-    <Navigate to="/login" replace />
+    <div>
+         <Outlet />
+    </div>
+  ): (
+     <Navigate to="/login" replace={true} />
   )
-};
+}
 
-export default PrivateRouter;
+export default PrivateRouter

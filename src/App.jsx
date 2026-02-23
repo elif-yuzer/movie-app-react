@@ -1,24 +1,21 @@
-import React, { useContext } from 'react'
+import  { AuthProvider } from "./context/AuthContext";
+import  MovieProvider  from "./context/MovieContext";
 import AppRouter from "./router/AppRouter";
-import AuthProvider from "./context/AuthProvider";
-import MovieProvider from './context/MovieProvider';
-import { ToastContainer } from 'react-toastify';
- 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-
-  
-
-
   return (
-   
-    <AuthProvider>
-    <MovieProvider>
+
+
+     <div  className='dark:bg-[#23242a]'>
+       <AuthProvider>
+       <MovieProvider>
       <AppRouter />
-      <ToastContainer/>
+      <ToastContainer position="top-right" />
       </MovieProvider>
-      
-    </AuthProvider>
+      </AuthProvider>
+    </div>
   );
 }
 

@@ -1,71 +1,67 @@
-import React, { useState } from 'react'
-import { MovieContext } from '../context/MovieProvider'
-import { useContext } from 'react'
+import React from "react";
+import { MovieContext } from "../context/MovieContext";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Watchlist = () => {
+  const navigate = useNavigate();
+  const { myMovies, imgUrl } = useContext(MovieContext);
 
-    const {myMovies}=useContext(MovieContext)
-  
-   /*  console.log(myMovies); */
-   
-    
+  /*  console.log(myMovies); */
+  console.log(myMovies);
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-    
-      {myMovies?.length > 0 ? (
-        myMovies.map((a) => (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 px-4 py-4">
+      {myMovies.length > 0 ? (
+        myMovies.map((film) => (
           <div
-            key={a.id}
-            className=" cursor-pointer group overflow-hidden"
+            key={film.id}
+            onClick={() =>
+              navigate(`/private/details/${film.id}`, { state: film })
+            }
+            className="card bg-base-100 shadow-md hover:shadow-xl transition-shadow rounded-lg overflow-hidden h-full group cursor-pointer relative"
           >
-            <div className="card rounded-2xl bg-base-100 image-full mb-4  mx-auto   w-[85%] shadow-sm relative group overflow-hidden">
-              <figure>
-                <img
-                  className=" object-cover"
-                  src={a.poster_url}
-                  alt={a.title}
-                />
-              </figure>
+            <figure className="relative overflow-hidden bg-gray-700 h-64">
+              <img
+                src={`${imgUrl}${film.poster_path}`}
+                alt={film.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </figure>
 
-              <div className="card-body flex justify-between gap-2 flex-col items-center bg-amber-500 p-4">
-                <div>
-                  <h2 className="card-title">{a.title}</h2>
-                </div>
-              
-
-                <div
-                  className="badge badge-primary badge-lg ms-auto border border-transparent rounded px-3 py-2
-                  focus:outline-none
-                  focus:ring-2 focus:ring-blue-500
-                  focus:ring-offset-2 focus:ring-offset-white bg-blue-600 text-xl"
-                >
-                  {Number(a.vote_average ?? 0).toFixed(1)}
-                </div>
-
-                <div className="card-actions justify-end ">
-                  <div className="absolute inset-0 bg-black/70 opacity-0 transition-opacity duration-300 group-hover:opacity-100 " />
-
-                  <div
-                    className="absolute inset-0 p-4 flex flex-col justify-end 
-                    opacity-0 translate-y-8
-                    transition-all duration-300
-                    group-hover:opacity-100 group-hover:translate-y-0 z-10 overflow-y-auto max-h-[70%] "
-                  >
-                    <p className="text-gray-500 text-sm   bg-amber-50 rounded-l p-4 text-center rounded-2xl tracking-tightermix-blend-soft-light ">
-                      {a.overview}
-                    </p>
-                   
-                  </div>
-                </div>
+            <div className="card-body p-3 flex flex-col justify-between">
+              <div>
+                <h2 className="card-title text-sm line-clamp-2">
+                  {film.title}
+                </h2>
+                <p className="text-xs opacity-70">
+                  {film.release_date?.substring(0, 4)}
+                </p>
               </div>
+
+              <div
+                className={`badge badge-sm ${
+                  Number(film?.vote_average ?? 0) > 7
+                    ? "bg-blue-600"
+                    : "bg-red-600"
+                } text-white w-fit`}
+              >
+                ⭐ {Number(film.vote_average ?? 0).toFixed(1)}
+              </div>
+            </div>
+
+            <div className="absolute inset-0 bg-black/75 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-end">
+              <p className="text-white text-xs line-clamp-4">{film.overview}</p>
             </div>
           </div>
         ))
       ) : (
-        <h2 className="text-white">Filmler aranıyor veya bulunamadı... 🎥</h2>
+        <h2 className="text-white col-span-full text-center">
+          Filmler aranıyor veya bulunamadı... 🎥
+        </h2>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Watchlist
+export default Watchlist;

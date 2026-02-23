@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+  --font-brand: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+}
