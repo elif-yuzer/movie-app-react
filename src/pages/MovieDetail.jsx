@@ -1,78 +1,152 @@
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import bgImg from "../assets/bgimage.jpg";
-import AuthContext from "../context/AuthContext";
+import React, { useContext, useEffect, useState } from "react";
+import { MovieContext } from "../context/MovieContext";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toastError } from "../helpers/ToastNotify";
 
-const Register = () => {
-  const { handleRegister, currentUser } = useContext(AuthContext);
+const MovieDetail = () => {
+  const { imgUrl, api_key, addWatch } = useContext(MovieContext);
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { state } = useLocation();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const [videoKey, setVideoKey] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
-    await handleRegister(firstName, lastName, email, password);
+  const videoUrl = () => {
+    if (!id || !api_key) return "";
+    return `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${api_key}`;
+  };
+
+  const getVideo = async () => {
+    try {
+      const url = videoUrl();
+      if (!url) return;
+
+      const res = await axios.get(url);
+      const results = res?.data?.results ?? [];
+
+      if (results.length === 0) {
+        setVideoKey("");
+        return;
+      }
+
+      const teaser = results.find((v) => v.type === "Teaser");
+      const chosen = teaser || results[0];
+
+      setVideoKey(chosen?.key || "");
+    } catch (error) {
+      toastError("Not found");
+      setVideoKey("");
+    }
+  };
+
+  useEffect(() => {
+    getVideo();
+  }, [id, api_key]);
+
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+
+  const handleaddWatchList = (e, state) => {
+    console.log("WATCHLIST CLICK", state?.id);
+    e.stopPropagation();
+    addWatch(state);
   };
 
   return (
-    <div
-      className=" bg-cover bg-center bg-no-repeat min-h-screen w-full flex items-center fixed justify-center bg-zinc-300 "
-      style={{ backgroundImage: `url(${bgImg})` }}
-    >
-      <div className=" md:w-1/2 ">
-        <div className=" bg-gray-900/70 max-w-md rounded-2xl backdrop-blur-xl shadow-2xl p-10 border border-slate-700 text-slate-100">
-          <h2 className="text-4xl font-bold text-white mb-4">Register</h2>
+    <div className="bg-base-100 shadow-sm rounded-xl overflow-hidden max-w-3xl mx-auto flex flex-col md:flex-row">
+      <figure className="md:w-[35%] w-full">
+        <img
+          className="w-full h-full object-cover"
+          src={`${imgUrl}${state?.poster_path || ""}`}
+          alt={state?.title || "Movie poster"}
+        />
+      </figure>
 
-          <form className="flex flex-col gap-5 h-auto" onSubmit={handleSubmit}>
-            <div>
-              <input
-                className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 outline-none focus:border-red-500 transition-all"
-                placeholder="FirstName"
-                type="text"
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </div>
-            <div>
-              <input
-                className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 outline-none focus:border-red-500 transition-all"
-                placeholder="LastName"
-                type="text"
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </div>
+      <div className="p-5 flex-1 flex flex-col gap-3">
+        <h2 className="text-xl font-semibold">{state?.title}</h2>
+        <p className="text-sm opacity-80">{state?.overview}</p>
 
-            <input
-              className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 outline-none focus:border-red-500 transition-all"
-              placeholder="E-mail adress"
-              type="email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
+        <p className="text-sm opacity-60">Release {state?.release_date}</p>
 
-            <input
-              className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 outline-none focus:border-red-500 transition-all"
-              placeholder="Password"
-              type="password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+        <div className="mt-auto flex flex-col gap-2 justify-end">
+          <button
+            onClick={() => navigate(-1)}
+            className="btn btn-ghost cursor-pointer hover:text-blue-400"
+          >
+            Geri Dön
+          </button>
 
-            <div className="mt-4 space-y-3">
-              <button
-                type="submit"
-                className="w-full rounded-lg bg-gray-400 py-3 font-bold text-white hover:bg-gray-700  shadow-lg shadow-red-900/20 transition-all active:scale-[0.98]"
-              >
-                Sign Up
-              </button>
+          <button
+            onClick={openModal}
+            className="btn btn-primary hover:text-blue-400 border-0 cursor-pointer"
+            disabled={!videoKey}
+            title={!videoKey ? "Fragman bulunamadı" : "Fragmanı izle"}
+          >
+            Watch fragman
+          </button>
 
-              <div></div>
-            </div>
-          </form>
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={(e) => handleaddWatchList(e, state)}
+              className="inline-flex items-center justify-center gap-2 px-6 py-2 border-2 rounded-2xl cursor-pointer hover:text-blue-400"
+            >
+              <span className="inline-block text-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+              </span>
+              Watchlist
+            </button>
+          </div>
         </div>
       </div>
+
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/80 z-50 flex justify-center items-center p-4"
+          onClick={closeModal}
+        >
+          <div className="relative w-full max-w-4xl aspect-video">
+            {videoKey ? (
+              <iframe
+                className="w-full h-full rounded-xl"
+                src={`https://www.youtube.com/embed/${videoKey}?autoplay=1&rel=0`}
+                title="Trailer"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <div className="w-full h-full rounded-xl bg-black flex items-center justify-center text-white">
+                Video yok veya yüklenemedi
+              </div>
+            )}
+
+            <button
+              onClick={closeModal}
+              className="absolute top-4 cursor-pointer right-4 rounded-xl bg-blue-600 px-4 py-2 font-medium text-white transition hover:bg-blue-700 active:scale-[0.98]"
+            >
+              Kapat
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Register;
+export default MovieDetail;
