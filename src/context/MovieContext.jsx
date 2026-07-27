@@ -8,33 +8,30 @@ import { db } from "../auth/firebase";
 export const MovieContext = createContext();
 import { toastSuccess } from "../helpers/ToastNotify";
 const MovieProvider = ({ children }) => {
-   
   const { currentUser } = useContext(AuthContext);
   const api_key = import.meta.env.VITE_TMDB_KEY;
   const url = `https://api.themoviedb.org/3/discover/movie?api_key=${api_key}`;
- /*  console.log(api_key); */
+  /*  console.log(api_key); */
   const imgUrl = "https://image.tmdb.org/t/p/w1280";
-
 
   const [films, setFilms] = useState([]);
   const [loading, setLoading] = useState(false);
   const [myMovies, setMyMovies] = useState([]);
 
   const getFilmData = async (url) => {
-    setLoading(true)
-    try{
-      const response=await axios.get(url)
+    setLoading(true);
+    try {
+      const response = await axios.get(url);
       /* console.log(response); */
-      const {data:{results}}=response
-      setFilms(results)
-      setLoading(false)
-      
-
-    } catch(error){
+      const {
+        data: { results },
+      } = response;
+      setFilms(results);
+      setLoading(false);
+    } catch (error) {
       console.log(error);
     }
-
-  }
+  };
 
   useEffect(() => {
     getFilmData(url);
@@ -53,17 +50,22 @@ const MovieProvider = ({ children }) => {
   };
 
   const sortWithIMDB = () => {
-    const sortedFilms = [...films].sort((a, b) => b.vote_average - a.vote_average);
+    const sortedFilms = [...films].sort(
+      (a, b) => b.vote_average - a.vote_average,
+    );
     setFilms(sortedFilms);
   };
 
-   const addWatch = async (movie) => {
-    console.log("addWatch called", { movieId: movie?.id, currentUser: !!currentUser });
+  const addWatch = async (movie) => {
+    console.log("addWatch called", {
+      movieId: movie?.id,
+      currentUser: !!currentUser,
+    });
     if (!currentUser?.uid) {
       console.log("currentUser yok, addWatch çalışmadı");
       return;
     }
-   
+
     try {
       const movieRef = doc(
         db,
@@ -90,7 +92,7 @@ const MovieProvider = ({ children }) => {
     }
     toastSuccess("watchlist'e eklendi");
   };
-   const handleGetfromFireBase = () => {
+  const handleGetfromFireBase = () => {
     if (!currentUser?.uid) {
       return;
     }
@@ -117,8 +119,6 @@ const MovieProvider = ({ children }) => {
     return unsubscribe;
   }, [currentUser?.uid]);
 
-  
-
   return (
     <MovieContext.Provider
       value={{
@@ -131,7 +131,8 @@ const MovieProvider = ({ children }) => {
         sortWithReleaseDate,
         sortWithIMDB,
         addWatch,
-        setMyMovies
+        setMyMovies,
+        api_key,
       }}
     >
       {children}
