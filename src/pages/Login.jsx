@@ -49,7 +49,7 @@ const Login = () => {
               <button
                 onClick={()=>handleResetPass(email)}
                 type="button"
-                className=" cursor-pointer text-oklch(88% 0.011 106.6) hover:text-blue-400 transition-colors"
+                className=" cursor-pointer text-slate-300 hover:text-blue-400 transition-colors"
               >
                 Forgot Password
               </button>
@@ -57,7 +57,7 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => navigate("/register")}
-                className=" cursor-pointer text-oklch(88% 0.011 106.6) hover:text-blue-400"
+                className=" cursor-pointer text-slate-300 hover:text-blue-400"
               >
                 Create a New Account
               </button>
