@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
         photoURL: auth.currentUser.photoURL,
       });
       toastSuccess("Registered Successful");
-      navigate("/home");
+      navigate("/private/home");
     } catch (error) {
       toastError("Something went wrong");
     }
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toastSuccess("Logged in Successfully");
-      navigate("/");
+      navigate("/private/home");
     } catch (error) {
       toastError(error.message);
     }
@@ -79,7 +79,7 @@ export const AuthProvider = ({ children }) => {
         toastSuccess("Logged in with Google Successfully");
         console.log(result);
 
-        navigate("/");
+        navigate("/private/home");
       })
       .catch((error) => {
         console.log(error);
