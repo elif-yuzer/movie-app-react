@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import bgImg from "../assets/bgimage.jpg";
 import { useContext } from "react";
-import  AuthContext  from "../context/AuthContext";
+import AuthContext from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const Login = () => {
 
             <div className="flex items-center justify-between text-xs font-medium">
               <button
-                onClick={()=>handleResetPass(email)}
+                onClick={() => handleResetPass(email)}
                 type="button"
                 className=" cursor-pointer text-slate-300 hover:text-blue-400 transition-colors"
               >
@@ -64,7 +64,7 @@ const Login = () => {
             </div>
 
             <div className="mt-4 space-y-3">
-              <button 
+              <button
                 type="submit"
                 className="w-full rounded-lg bg-gray-400 py-3 font-bold text-white hover:bg-gray-700  shadow-lg shadow-red-900/20 transition-all active:scale-[0.98]"
               >
@@ -72,7 +72,7 @@ const Login = () => {
               </button>
               <button
                 type="button"
-                onClick={() => navigate("/home")}
+                onClick={() => navigate("/")}
                 className="w-full rounded-lg bg-gray-400 py-3 font-bold text-white hover:bg-gray-700 shadow-lg shadow-red-900/20 transition-all active:scale-[0.98]"
               >
                 Cancel

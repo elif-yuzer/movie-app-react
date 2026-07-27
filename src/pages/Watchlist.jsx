@@ -56,7 +56,7 @@ const Watchlist = () => {
           </div>
         ))
       ) : (
-        <h2 className="text-white col-span-full text-center">
+        <h2 className="text-gray-700 col-span-full text-center">
           Filmler aranıyor veya bulunamadı... 🎥
         </h2>
       )}

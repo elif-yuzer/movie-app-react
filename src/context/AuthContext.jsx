@@ -22,10 +22,10 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const { uid, email, displayName, photoURL } = user;
         setCurrentUser({
@@ -37,7 +37,9 @@ export const AuthProvider = ({ children }) => {
       } else {
         setCurrentUser(false);
       }
+      setLoading(false);
     });
+    return () => unsubscribe();
   }, []);
 
   const handleRegister = async (firstName, lastName, email, password) => {
@@ -57,6 +59,7 @@ export const AuthProvider = ({ children }) => {
       });
       toastSuccess("Registered Successful");
       navigate("/private/home");
+      setLoading(false);
     } catch (error) {
       toastError("Something went wrong");
     }
