@@ -89,7 +89,7 @@ const Navbar = () => {
 
         {/* END */}
         <div className="navbar-end gap-2">
-          <span className=" cursor-pointer text-olive-300 hover:text-blue-400 transition-colors">
+          <span className=" cursor-pointer font-medium text-gray-900 hover:text-blue-400 transition-colors">
             {currentUser?.displayName}
           </span>
 
