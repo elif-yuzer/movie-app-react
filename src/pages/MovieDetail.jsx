@@ -33,7 +33,10 @@ const MovieDetail = () => {
       }
 
       const teaser = results.find((v) => v.type === "Teaser");
-      const chosen = teaser || results[0];
+      const trailer = results.find((v) => v.type === "Trailer");
+      const youtube = results.find((v) => v.site === "YouTube");
+
+      const chosen =  trailer || teaser  || youtube || results[0];
 
       setVideoKey(chosen?.key || "");
     } catch (error) {
