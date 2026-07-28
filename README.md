@@ -73,12 +73,12 @@ npm run dev
 
 ## TMDB endpoints used
 
-| Purpose | Endpoint |
-|--------|----------|
-| Discover | `/3/discover/movie?api_key=...` |
-| Search | `/3/search/movie?api_key=...&query=` |
-| Videos / trailer | `/3/movie/{id}/videos?api_key=...` |
-| Posters | `https://image.tmdb.org/t/p/w1280{poster_path}` |
+| Purpose          | Endpoint                                        |
+| ---------------- | ----------------------------------------------- |
+| Discover         | `/3/discover/movie?api_key=...`                 |
+| Search           | `/3/search/movie?api_key=...&query=`            |
+| Videos / trailer | `/3/movie/{id}/videos?api_key=...`              |
+| Posters          | `https://image.tmdb.org/t/p/w1280{poster_path}` |
 
 ---
 
