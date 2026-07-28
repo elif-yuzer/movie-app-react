@@ -2,15 +2,15 @@ import React, { useContext } from "react";
 import { MovieContext } from "../context/MovieContext";
 import { useNavigate } from "react-router-dom";
 
-const MovieCard = ({ filteredFilms }) => {
-  const { imgUrl } = useContext(MovieContext);
+const MovieCard = () => {
+  const { imgUrl, films } = useContext(MovieContext);
   const navigate = useNavigate();
 
   return (
     <div className="px-4 py-4">
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-4">
-        {filteredFilms.length > 0 ? (
-          filteredFilms.map((film) => (
+        {films?.length > 0 ? (
+          films.map((film) => (
             <div
               key={film.id}
               onClick={() =>
