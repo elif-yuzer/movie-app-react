@@ -27,9 +27,10 @@ const MovieProvider = ({ children }) => {
         data: { results },
       } = response;
       setFilms(results);
-      setLoading(false);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,6 +39,7 @@ const MovieProvider = ({ children }) => {
   }, [currentUser]);
 
   const sortWithPopularity = () => {
+    console.log(films);
     const sortedFilms = [...films].sort((a, b) => b.vote_count - a.vote_count);
     setFilms(sortedFilms);
   };
@@ -133,6 +135,8 @@ const MovieProvider = ({ children }) => {
         addWatch,
         setMyMovies,
         api_key,
+        url,
+        getFilmData,
       }}
     >
       {children}
