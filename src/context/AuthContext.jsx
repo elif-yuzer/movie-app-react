@@ -59,9 +59,10 @@ export const AuthProvider = ({ children }) => {
       });
       toastSuccess("Registered Successful");
       navigate("/private/home");
-      setLoading(false);
     } catch (error) {
       toastError("Something went wrong");
+    } finally {
+      setLoading(false);
     }
   };
 
