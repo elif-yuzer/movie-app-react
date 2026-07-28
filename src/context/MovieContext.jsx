@@ -6,7 +6,7 @@ import axios from "axios";
 import { collection, doc, onSnapshot, setDoc } from "firebase/firestore";
 import { db } from "../auth/firebase";
 export const MovieContext = createContext();
-import { toastSuccess } from "../helpers/ToastNotify";
+import { toastSuccess, toastError } from "../helpers/ToastNotify";
 const MovieProvider = ({ children }) => {
   const { currentUser } = useContext(AuthContext);
   const api_key = import.meta.env.VITE_TMDB_KEY;
@@ -59,12 +59,12 @@ const MovieProvider = ({ children }) => {
   };
 
   const addWatch = async (movie) => {
-    console.log("addWatch called", {
-      movieId: movie?.id,
-      currentUser: !!currentUser,
-    });
     if (!currentUser?.uid) {
-      console.log("currentUser yok, addWatch çalışmadı");
+      toastError("Watchlist için giriş yapmalısın");
+      return;
+    }
+    if (!movie?.id) {
+      toastError("Film bilgisi eksik");
       return;
     }
 
@@ -72,7 +72,7 @@ const MovieProvider = ({ children }) => {
       const movieRef = doc(
         db,
         "users",
-        currentUser?.uid,
+        currentUser.uid,
         "watchlist",
         movie.id.toString(),
       );
@@ -89,10 +89,11 @@ const MovieProvider = ({ children }) => {
       };
 
       await setDoc(movieRef, veriler);
+      toastSuccess("watchlist'e eklendi");
     } catch (error) {
       console.log("Firestore hata:", error.code, error.message);
+      toastError(error.message || "Watchlist'e eklenemedi");
     }
-    toastSuccess("watchlist'e eklendi");
   };
   const handleGetfromFireBase = () => {
     if (!currentUser?.uid) {
