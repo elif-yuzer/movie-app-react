@@ -1,178 +1,90 @@
-🎬 Movie App: Journey of an Optimizer
+# justWATCH — Movie App
 
-This project is the story of a developer who is still in the learning process—discovering modern web technologies and overcoming the technical obstacles along the way. It’s not just a movie app; it’s also a problem-solving journey.
+A React movie explorer with Firebase auth, TMDB search, trailers, and a personal watchlist.
 
-🧠 Challenges & Solutions
+**Live demo:** [movie-app-react-eosin-theta.vercel.app](https://movie-app-react-eosin-theta.vercel.app)
 
-Syntax & Logic Mastery (The Maze of Braces):
-At the beginning, one of my biggest challenges was mixing up JSX curly braces {} with JavaScript logic (especially ternary expressions). Over time, I started to treat each brace as a “door,” which helped me build a clearer understanding of code hierarchy and parent-child relationships.
+---
 
-The “Ghost” Component Issue:
-I faced a problem where the detail page appeared on the home page like a “ghost.” This bug pushed me to deeply understand how React Router works and how components are placed within the DOM hierarchy.
+## Features
 
-UI/UX Evolution (Split-Screen Transformation):
-I moved from classic login screens to a modern and aesthetic split-screen design. With Tailwind CSS, I learned how to build responsive layouts and maintain visual balance.
+- Email / password and Google sign-in (Firebase Auth)
+- Protected routes (`/private/*`) for home, details, and watchlist
+- Discover movies + TMDB keyword search
+- Sort by release date, popularity, and rating
+- Movie detail page with YouTube trailer
+- Watchlist saved per user in Cloud Firestore
 
-🛠️ Tech Stack
+## Tech stack
 
-Frontend: React (Vite), Tailwind CSS, Headless UI / DaisyUI
+- React (Vite)
+- React Router
+- Context API
+- Tailwind CSS + DaisyUI
+- Axios + [TMDB API](https://www.themoviedb.org/documentation/api)
+- Firebase Auth & Firestore
+- Deployed on Vercel
 
-State Management: Context API (to manage data flow from a single source)
+## Getting started
 
-Routing: React Router v6 (custom routes and protected areas)
+### 1. Clone and install
 
-Backend & Auth: Firebase (Authentication and data management)
+```bash
+git clone https://github.com/elif-yuzer/movie-app-react.git
+cd movie-app-react
+npm install
+```
 
-Data Fetching: Axios & TMDB API
+### 2. Environment variables
 
-✨ Features
+Create a `.env` file in the project root (do not commit it):
 
-Auth Logic: Login/Register flows and Google sign-in
+```env
+VITE_APP_API_KEY=
+VITE_APP_AUTH_DOMAIN=
+VITE_APP_PROJECT_ID=
+VITE_APP_STORAGE_BUCKET=
+VITE_APP_MESSAGING_SENDER_ID=
+VITE_APP_APP_ID=
+VITE_TMDB_KEY=
+```
 
-Private Routing: Movie detail pages accessible only to authenticated users
+- Firebase values: Firebase Console → Project settings → Your apps → `firebaseConfig`
+- TMDB key: [TMDB API settings](https://www.themoviedb.org/settings/api)
 
-Dynamic Search & Listing: Real-time movie search and listing via TMDB
+### 3. Run locally
 
-Responsive Design: Flexible UI that works smoothly across all devices
+```bash
+npm run dev
+```
 
-📈 Roadmap (Missing Features & Goals)
+### 4. Firebase checklist
 
-Advanced Sorting: Dynamically sort movies by release date and TMDB rating
+- Authentication: enable Email/Password and Google
+- Firestore: create database and publish rules for `users/{userId}/watchlist/{movieId}` (authenticated user can read/write only their own docs)
+- Auth → Authorized domains: add `localhost` and your Vercel domain
 
-Watchlist: Save favorite movies to Firebase Firestore
+## What I learned / challenges
 
-Optimization: Faster image loading with lazy loading
+- **Auth race on private routes:** waiting for `onAuthStateChanged` with a `loading` flag before redirecting to login
+- **SPA deploy 404:** client routes like `/private/watchlist` need a Vercel rewrite to `index.html`
+- **Firestore `permission-denied`:** security rules must match the `users/{uid}/watchlist` path and require `request.auth.uid`
+- **Context + API flow:** sharing TMDB fetch helpers and film state through Context instead of prop drilling
 
-NOTE
+## TMDB endpoints used
 
-While building this project, I wasn’t afraid to make mistakes—I treated every “Error” message as a learning opportunity. This project especially helped me strengthen weaker areas such as Context API usage and asynchronous data handling.
+| Purpose | Endpoint |
+|--------|----------|
+| Discover | `/3/discover/movie?api_key=...` |
+| Search | `/3/search/movie?api_key=...&query=` |
+| Videos / trailer | `/3/movie/{id}/videos?api_key=...` |
+| Posters | `https://image.tmdb.org/t/p/w1280{poster_path}` |
 
-MDB API Setup & Endpoints
+---
 
-Create an account and generate an API key from TMDB:
-https://www.themoviedb.org/documentation/api
+<details>
+<summary>Türkçe özet</summary>
 
-Use the following endpoints:
-
-Discover Movies
-
-Fetch popular/discoverable movies:
-
-https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}
-
-Search Movies
-
-Search by keyword:
-
-https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=
-
-Movie Details
-
-Get details for a specific movie by ID:
-
-https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}
-
-Movie Videos (Trailer/Teaser)
-
-Get the YouTube video key(s) for a movie:
-
-https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}
-
-Poster Images
-
-Use this base URL for movie posters:
-
-https://image.tmdb.org/t/p/w1280${poster_path}
-
-![App Demo](./src//assets/movie.gif)
-
-<details>  TURKISH VERSION
-
-🎬 Movie App: Journey of an Optimizer
-Bu proje, öğrenme süreci devam eden bir developer olarak modern web teknolojileriyle tanışma ve karşılaştığım teknik engelleri aşma hikayesidir. Sadece bir film uygulaması değil, aynı zamanda bir problem çözme serüvenidir.
-
-🧠 Challenges & Solutions / Zorluklar ve Çözümler
-Syntax & Logic Mastery (Parantezlerin Labirenti): Başlangıçta JSX içindeki süslü parantezlerin {} ve JavaScript mantığının (ternary) birbirine girmesi en büyük engellerden biriydi. Ancak, her bir parantezi bir "kapı" olarak görmeye başlayarak, kod hiyerarşisini (parent-child ilişkisi) kurma becerimi geliştirdim.
-
-The "Ghost" Component Issue (Hayalet Bileşen Sorunu): Detay sayfasının ana sayfada "hayalet" gibi görünmesi sorunuyla karşılaştım. Bu hata sayesinde React Router'ın çalışma mantığını ve bileşenlerin DOM içindeki yerleşim hiyerarşisini derinlemesine kavradım.
-
-UI/UX Evolution (Split-Screen Dönüşümü): Klasik giriş sayfalarından, modern ve estetik bir "Split Screen" (Bölünmüş Ekran) tasarımına geçiş yaptım. Tailwind CSS ile responsive yapıları ve görsel dengeyi kurmayı öğrendim.
-
-Tech Stack / Kullanılan Teknolojiler
-Frontend: React (Vite), Tailwind CSS, Headless UI / DaisyUI.
-
-State Management: Context API (Veri akışını tek merkezden yönetmek için).
-
-Routing: React Router v6 (Özel rotalar ve korumalı alanlar için).
-
-Backend & Auth: Firebase (Authentication ve Veri yönetimi).
-
-Data Fetching: Axios & TMDB API.
-
-✨ Features / Özellikler
-Auth Logic: Login/Register süreçleri ve Google ile giriş imkanı.
-
-Private Routing: Sadece giriş yapmış kullanıcıların görebileceği film detay sayfaları.
-
-Dynamic Search & Listing: TMDB üzerinden gerçek zamanlı film arama ve listeleme.
-
-Responsive Design: Her türlü cihazda kusursuz çalışan esnek arayüz.
-
-📈 Roadmap / Yol Haritası (Eksikler ve Hedefler)
-[ ] Advanced Sorting: Filmleri yayın tarihine ve TMDB puanına göre dinamik olarak sıralamak.
-
-[ ] Watchlist: Kullanıcıların favori filmlerini Firebase Firestore'a kaydetmesi.
-
-[ ] Optimization: Resimlerin lazy loading ile daha hızlı yüklenmesi.
-
-Gemini said
-Harika bir fikir! Bir öğretmenin titizliği ve bir geliştiricinin çözüm odaklılığını birleştiren bu README, HR (İnsan Kaynakları) uzmanlarına sadece kod yazabildiğini değil, aynı zamanda nasıl öğrendiğini ve sorunları nasıl analiz ettiğini de gösterecek. 🚀
-
-İşte senin için hazırladığım, hatalarından ders çıkaran ve gelişimini ön plana çıkaran profesyonel README taslağı:
-
-🎬 Movie App: Journey of an Optimizer
-Bu proje, bir developer olarak modern web teknolojileriyle tanışma ve karşılaştığım teknik engelleri aşma hikayesidir. Sadece bir film uygulaması değil, aynı zamanda bir problem çözme serüvenidir.
-
-🚀 My Journey & Technical Growth / Yolculuğum ve Teknik Gelişimim
-HR uzmanları için bu proje, bir geliştiricinin "darboğazları nasıl aştığını" temsil eder:
-
-🧠 Challenges & Solutions / Zorluklar ve Çözümler
-Syntax & Logic Mastery (Parantezlerin Labirenti): Başlangıçta JSX içindeki süslü parantezlerin {} ve JavaScript mantığının (ternary) birbirine girmesi en büyük engellerden biriydi. Ancak, her bir parantezi bir "kapı" olarak görmeye başlayarak, kod hiyerarşisini (parent-child ilişkisi) kurma becerimi geliştirdim.
-
-The "Ghost" Component Issue (Hayalet Bileşen Sorunu): Detay sayfasının ana sayfada "hayalet" gibi görünmesi sorunuyla karşılaştım. Bu hata sayesinde React Router'ın çalışma mantığını ve bileşenlerin DOM içindeki yerleşim hiyerarşisini derinlemesine kavradım.
-
-UI/UX Evolution (Split-Screen Dönüşümü): Klasik giriş sayfalarından, modern ve estetik bir "Split Screen" (Bölünmüş Ekran) tasarımına geçiş yaptım. Tailwind CSS ile responsive yapıları ve görsel dengeyi kurmayı öğrendim.
-
-🛠️ Tech Stack / Kullanılan Teknolojiler
-Frontend: React (Vite), Tailwind CSS, Headless UI / DaisyUI.
-
-State Management: Context API (Veri akışını tek merkezden yönetmek için).
-
-Routing: React Router v6 (Özel rotalar ve korumalı alanlar için).
-
-Backend & Auth: Firebase (Authentication ve Veri yönetimi).
-
-Data Fetching: Axios & TMDB API.
-
-✨ Features / Özellikler
-Auth Logic: Login/Register süreçleri ve Google ile giriş imkanı.
-
-Private Routing: Sadece giriş yapmış kullanıcıların görebileceği film detay sayfaları.
-
-Dynamic Search & Listing: TMDB üzerinden gerçek zamanlı film arama ve listeleme.
-
-Responsive Design: Her türlü cihazda kusursuz çalışan esnek arayüz.
-
-📈 Roadmap / Yol Haritası (Eksikler ve Hedefler)
-[ ] Advanced Sorting: Filmleri yayın tarihine ve TMDB puanına göre dinamik olarak sıralamak.
-
-[ ] Watchlist: Kullanıcıların favori filmlerini Firebase Firestore'a kaydetmesi.
-
-[ ] Optimization: Resimlerin lazy loading ile daha hızlı yüklenmesi.
-
-NOT:
-Bu projeyi geliştirirken hata yapmaktan korkmadım; her "Error" mesajını bir öğrenme fırsatı olarak değerlendirdim. Özellikle Context API ve Asenkron veri yönetimi konularındaki zayıf bağlantılarımı, bu proje sayesinde güçlendirdim.
-
-  <summary>Türkçe README</summary>
+Film keşfi, arama, fragman ve kullanıcıya özel watchlist içeren bir React uygulaması. Auth ve veri için Firebase, film verisi için TMDB kullanıldı; canlı sürüm Vercel’de.
 
 </details>
